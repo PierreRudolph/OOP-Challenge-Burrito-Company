@@ -13,31 +13,31 @@
 <body onload="loadPreBuildBasket()">
     <div class="outer-div">
         <div class="shopping-basket">
-            <table id="basket-div">
+            <div class="rabatt-code-div">
+                <span onclick="fillRabattInput('rabattPercent')">4% Rabatt</span>
+                <span onclick="fillRabattInput('rabattEuro')">4 Euro Rabatt</span>
+            </div>
+            <form onsubmit="makeRabatt();return false">
+                <input id="rabatt-input" required>
+                <button type="submit">Rabattcode Einlösen</button>
+            </form>
+            <table>
                 <thead>
                     <th>Name</th>
                     <th>Menge</th>
                     <th>Preis</th>
+                    <th></th>
                     <th>Total</th>
                 </thead>
+                <tbody id="basket-div">
+
+                </tbody>
                 <tfoot id="table-footer">
-                    <tr>
-                        <th>Rabatt:</th>
-                        <td>15 Euro</td>
-                    </tr>
 
                 </tfoot>
             </table>
         </div>
-        <form class="add-product-form" onsubmit="createBasket();return false">
-            <input id="input-name" required>
-            <input id="input-amount" required>
-            <button type="submit">Warenkorb erstellen</button>
-        </form>
-
     </div>
 </body>
-
-
 
 </html>

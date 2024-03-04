@@ -22,3 +22,22 @@ body {
     align-items: center;
     flex-direction: column;
 }
+
+.rabatt-code-div {
+    width: 100%;
+    padding: 5px 0px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.rabatt-code-div span {
+    padding: 2px 6px;
+    border-radius: 3px;
+    cursor: pointer;
+    width: fit-content;
+}
+
+.rabatt-code-div span:hover {
+    background-color: lightgrey;
+}

@@ -6,8 +6,6 @@ class Basket {
             this.products.push(newProduct);
         }
     }
-
-
 }
 
 class Product {
@@ -26,75 +24,129 @@ class Product {
         }
     }
 }
+
 let basket = new Basket();
+let rabatt = 0;
+let percent = false;
 let products = [
     {
-        name: 'CheeseBurrito',
+        name: 'Cheese Burrito',
         amount: 3,
-        prize: 8.00
+        prize: 8.50
     },
     {
-        name: 'SaladBurrito',
+        name: 'Salad Burrito',
         amount: 4,
-        prize: 3.00
+        prize: 3.50
     },
     {
-        name: 'PorkBurrito',
+        name: 'Pork Burrito',
         amount: 3,
-        prize: 6.00
+        prize: 6.50
     },
 ]
+
+
 function createBasket() {
-    let inputName = document.getElementById('input-name');
-    let inputAmount = document.getElementById('input-amount');
-    let newProduct = new Product(inputName.value, inputAmount.value);
-    basket.products.push(newProduct);
-    //let basket = new Basket(new Product('SalsaBurrito', 3));
-    //basket.products.push(new Product('CheeseBurrito', 5))
-    //basket.products.push(new Product('SalsaBurrito', 3))
-    //basket.products.push(new Product('SaladBurrito', 1))
-
-
-    console.log(basket)
-    clearBasket();
+    clearTableBody();
     loadBasket();
-    //clearFormInputs()
 }
+
+
+function formatNumber(num) {
+    const locals = 'de-De';
+    const options = { style: 'currency', currency: 'EUR' };
+    return new Intl.NumberFormat(locals, options).format(num);
+}
+
 
 function loadBasket() {
     let basketDiv = getHTMLElem('basket-div');
+    clearTableBody();
+    clearTableFooter();
     let totalAmount = 0;
+    let rabattAmount = 0;
+    let rabattPecent = 0;
     basket.products.forEach(element => {
         let prizeSum = element.prize * element.amount;
         basketDiv.innerHTML +=/*html*/`
         <tr>
             <td>${element.name}</td>
             <td>${element.amount}</td>
-           <td>${element.prize}</td>
-            <td>${prizeSum}</td>
+           <td>${formatNumber(element.prize)}</td>
+           <td></td>
+            <td>${formatNumber(prizeSum)}</td>
         </tr>
-   
+
     `;
         totalAmount = totalAmount + prizeSum;
-
     });
-    totalPrize(totalAmount);
+
+    if (!percent) {
+        rabattAmount = totalAmount - rabatt
+    }
+    if (percent) {
+        rabattPecent = totalAmount * rabatt / 100;
+        rabattAmount = totalAmount - rabattPecent;
+    }
+    innerHTMLTotalPrize(totalAmount, rabattAmount);
 }
 
-function totalPrize(totalAmount) {
+
+function innerHTMLTotalPrize(totalAmount, rabattAmount) {
     let tableFooter = getHTMLElem('table-footer');
+    if (!percent) {
+        rabatt = formatNumber(rabatt);
+    } else {
+        rabatt = rabatt + '%';
+    }
     tableFooter.innerHTML +=/*html*/`
     <tr>
-        <th>Gesamt:</th>
-        <td>${totalAmount}</td>
+        <th>Rabatt:</th>
+        <td></td>
+        <td>${rabatt}</td>
+        <td></td>
     </tr>
     <tr>
-        <td colspan="3">Rabatt Optional.</td>
+        <th>Gesamt:</th>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>${formatNumber(totalAmount)}</td>
+    </tr>
+    <tr>
+        <th>Mit Rabatt:</th>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>${formatNumber(rabattAmount)}</td>
+    </tr>
+    <tr>       
+        <td colspan="3">Rabatt Optional.</td>     
     </tr>
 `;
 }
 
+
+function makeRabatt() {
+    let rabattInput = getHTMLElem('rabatt-input');
+    if (rabattInput.value == 'rabattEuro') {
+        rabatt = 4;
+        percent = false;
+    }
+
+    if (rabattInput.value == 'rabattPercent') {
+        rabatt = 4;
+        percent = true;
+    }
+    clearRabattInput();
+    loadBasket();
+}
+
+
+
 function loadPreBuildBasket() {
+    //clearBasket();
     products.forEach((product) => {
         let newProduct = new Product(product.name, product.amount, product.prize);
         basket.products.push(newProduct)
@@ -102,17 +154,24 @@ function loadPreBuildBasket() {
     loadBasket();
 }
 
-function clearFormInputs() {
-    let inputName = getHTMLElem('input-name');
-    let inputAmount = getHTMLElem('input-amount');
-    inputAmount.value = '';
-    inputName.value = '';
+function fillRabattInput(rabattCode) {
+    getHTMLElem('rabatt-input').value = rabattCode;
 }
 
-function clearBasket() {
+function clearRabattInput() {
+    let rabattInput = getHTMLElem('rabatt-input');
+    rabattInput.value = "";
+}
+
+function clearTableBody() {
     let basketDiv = getHTMLElem('basket-div');
     basketDiv.innerHTML = "";
 }
+function clearTableFooter() {
+    let tableFooter = getHTMLElem('table-footer');
+    tableFooter.innerHTML = "";
+}
+
 
 function getHTMLElem(id) {
     let elem = document.getElementById(`${id}`);
