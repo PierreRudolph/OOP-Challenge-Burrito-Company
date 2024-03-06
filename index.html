@@ -6,14 +6,12 @@
     <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Document</title>
+    <title>Burrito Company</title>
 </head>
 
 <body onload="createProductList()">
     <div class="outer-div">
-        <div class="shopping-basket">
-
+        <div>
             <table style="width: 100%;">
                 Produktliste
                 <thead>
@@ -24,21 +22,8 @@
                     </tr>
                 </thead>
                 <tbody id="product-list">
-                    <!-- <tr class="product-row" onclick="addProduct(1234)">
-                        <td>Cheese Burrito</td>
-                        <td class="text-center">8,99€</td>
-                    </tr>
-                    <tr class="product-row" onclick="addProduct(1234)">
-                        <td>Cheese Burrito</td>
-                        <td class="text-center">8,99€</td>
-                    </tr>
-                    <tr class="product-row" onclick="addProduct(1234)">
-                        <td>Cheese Burrito</td>
-                        <td class="text-center">8,99€</td>
-                    </tr> -->
                 </tbody>
             </table>
-
             <div>
                 <div class="rabatt-code-div">
                     <span onclick="fillRabattInput('rabattPercent')">4% Rabatt</span>
@@ -49,7 +34,8 @@
                     <button type="submit">Rabattcode Einlösen</button>
                 </form>
             </div>
-
+        </div>
+        <div class="shopping-basket">
             <table>
                 Warenkorb
                 <thead>

@@ -46,7 +46,18 @@ let products = [
         prize: 6.49,
         id: 1456
     },
+    {
+        name: 'Chicken Burrito',
+        prize: 7.79,
+        id: 1567
+    },
+    {
+        name: 'Fancy Burrito',
+        prize: 9.99,
+        id: 1678
+    }
 ]
+
 
 function addProduct(id) {
     let newProduct = '';
@@ -62,6 +73,7 @@ function addProduct(id) {
     }
 }
 
+
 function iterateThruBasket(newProduct) {
     for (let i = 0; i < basket.products.length; i++) {
         const product = basket.products[i];
@@ -76,6 +88,7 @@ function iterateThruBasket(newProduct) {
         }
     }
 }
+
 
 function basketIsEmpty() {
     return basket.products.length == 0;
@@ -94,6 +107,7 @@ function isInBasket(newProduct) {
     return isInBasket;
 }
 
+
 function createProductList() {
     let productList = getHTMLElem('product-list');
     productList.innerHTML = '';
@@ -107,6 +121,7 @@ function createProductList() {
         `;
     })
 }
+
 
 function createBasket() {
     clearTableBody();
@@ -210,19 +225,24 @@ function fillRabattInput(rabattCode) {
     getHTMLElem('rabatt-input').value = rabattCode;
 }
 
+
 function clearRabattInput() {
     let rabattInput = getHTMLElem('rabatt-input');
     rabattInput.value = "";
 }
 
+
 function clearTableBody() {
     let basketDiv = getHTMLElem('basket-div');
     basketDiv.innerHTML = "";
 }
+
+
 function clearTableFooter() {
     let tableFooter = getHTMLElem('table-footer');
     tableFooter.innerHTML = "";
 }
+
 
 function getHTMLElem(id) {
     let elem = document.getElementById(`${id}`);
