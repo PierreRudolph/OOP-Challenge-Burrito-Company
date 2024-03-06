@@ -33,20 +33,17 @@ let percent = false;
 let products = [
     {
         name: 'Cheese Burrito',
-        amount: 3,
-        prize: 8.50,
+        prize: 8.99,
         id: 1234
     },
     {
         name: 'Salad Burrito',
-        amount: 4,
-        prize: 3.50,
+        prize: 3.49,
         id: 1345
     },
     {
         name: 'Pork Burrito',
-        amount: 3,
-        prize: 6.50,
+        prize: 6.49,
         id: 1456
     },
 ]
@@ -56,26 +53,59 @@ function addProduct(id) {
     products.forEach((product) => {
         newProduct = (product.id == id) ? newProduct = product : newProduct;
     })
-    console.log(newProduct)
-    if (basket.products.length == 0) {
+    if (basketIsEmpty()) {
         basket.products.push(new Product(newProduct.name, 1, newProduct.prize, newProduct.id))
-        console.log(basket.products)
         loadBasket();
         return
+    } else {
+        iterateThruBasket(newProduct);
     }
+}
 
-
-    basket.products.forEach((product) => {
+function iterateThruBasket(newProduct) {
+    for (let i = 0; i < basket.products.length; i++) {
+        const product = basket.products[i];
         if (newProduct.id == product.id) {
-            console.log('amount called')
             product.amount = product.amount + 1;
-        } else {
-            console.log('push called')
-            basket.products.push(new Product(newProduct.name, 1, newProduct.prize, newProduct.id))
+            loadBasket();
+            return;
+        } if (!isInBasket(newProduct)) {
+            basket.products.push(new Product(newProduct.name, 1, newProduct.prize, newProduct.id));
+            loadBasket();
+            return;
         }
+    }
+}
+
+function basketIsEmpty() {
+    return basket.products.length == 0;
+}
+
+
+function isInBasket(newProduct) {
+    let isInBasket = false;
+    for (let i = 0; i < basket.products.length; i++) {
+        const element = basket.products[i];
+        if (newProduct.id == element.id) {
+            isInBasket = true;
+            return isInBasket;
+        }
+    }
+    return isInBasket;
+}
+
+function createProductList() {
+    let productList = getHTMLElem('product-list');
+    productList.innerHTML = '';
+    products.forEach((product) => {
+        let productPrize = formatNumber(product.prize);
+        productList.innerHTML +=/*html*/`
+        <tr class="product-row" onclick="addProduct(${product.id})">
+                        <td>${product.name}</td>
+                        <td class="text-center">${productPrize}</td>
+                    </tr>
+        `;
     })
-    console.log(basket.products)
-    loadBasket();
 }
 
 function createBasket() {
@@ -135,8 +165,9 @@ function innerHTMLTotalPrize(totalAmount, rabattAmount) {
     <tr>
         <th>Rabatt:</th>
         <td></td>
-        <td>${rabattToString}</td>
         <td></td>
+        <td></td>
+        <td>${rabattToString}</td>
     </tr>
     <tr>
         <th>Gesamt:</th>
@@ -175,15 +206,6 @@ function makeRabatt() {
 }
 
 
-
-function loadPreBuildBasket() {
-    // products.forEach((product) => {
-    //     let newProduct = new Product(product.name, product.amount, product.prize);
-    //     basket.products.push(newProduct);
-    // })
-    // loadBasket();
-}
-
 function fillRabattInput(rabattCode) {
     getHTMLElem('rabatt-input').value = rabattCode;
 }
@@ -201,7 +223,6 @@ function clearTableFooter() {
     let tableFooter = getHTMLElem('table-footer');
     tableFooter.innerHTML = "";
 }
-
 
 function getHTMLElem(id) {
     let elem = document.getElementById(`${id}`);

@@ -10,7 +10,7 @@
     <title>Document</title>
 </head>
 
-<body onload="loadPreBuildBasket()">
+<body onload="createProductList()">
     <div class="outer-div">
         <div class="shopping-basket">
 
@@ -23,12 +23,19 @@
                         <th>Preis</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr class="product-row" onclick="addProduct(1234)">
-                        <td>Salsa Burrito</td>
-
-                        <td class="text-center">3,99€</td>
+                <tbody id="product-list">
+                    <!-- <tr class="product-row" onclick="addProduct(1234)">
+                        <td>Cheese Burrito</td>
+                        <td class="text-center">8,99€</td>
                     </tr>
+                    <tr class="product-row" onclick="addProduct(1234)">
+                        <td>Cheese Burrito</td>
+                        <td class="text-center">8,99€</td>
+                    </tr>
+                    <tr class="product-row" onclick="addProduct(1234)">
+                        <td>Cheese Burrito</td>
+                        <td class="text-center">8,99€</td>
+                    </tr> -->
                 </tbody>
             </table>
 
@@ -53,15 +60,14 @@
                     <th>Total</th>
                 </thead>
                 <tbody id="basket-div">
-
                 </tbody>
-
                 <tfoot id="table-footer">
                     <tr>
                         <th>Rabatt:</th>
                         <td></td>
-                        <td>0</td>
                         <td></td>
+                        <td></td>
+                        <td>0</td>
                     </tr>
                     <tr>
                         <th>Gesamt:</th>
@@ -76,9 +82,6 @@
                         <td></td>
                         <td></td>
                         <td>0</td>
-                    </tr>
-                    <tr>
-                        <td colspan="3">Rabatt Optional.</td>
                     </tr>
                 </tfoot>
             </table>
