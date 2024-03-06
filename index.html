@@ -13,15 +13,38 @@
 <body onload="loadPreBuildBasket()">
     <div class="outer-div">
         <div class="shopping-basket">
-            <div class="rabatt-code-div">
-                <span onclick="fillRabattInput('rabattPercent')">4% Rabatt</span>
-                <span onclick="fillRabattInput('rabattEuro')">4 Euro Rabatt</span>
+
+            <table style="width: 100%;">
+                Produktliste
+                <thead>
+                    <tr>
+                        <th class="text-start">Name</th>
+
+                        <th>Preis</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="product-row" onclick="addProduct(1234)">
+                        <td>Salsa Burrito</td>
+
+                        <td class="text-center">3,99€</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div>
+                <div class="rabatt-code-div">
+                    <span onclick="fillRabattInput('rabattPercent')">4% Rabatt</span>
+                    <span onclick="fillRabattInput('rabattEuro')">4 Euro Rabatt</span>
+                </div>
+                <form onsubmit="makeRabatt();return false">
+                    <input id="rabatt-input" required>
+                    <button type="submit">Rabattcode Einlösen</button>
+                </form>
             </div>
-            <form onsubmit="makeRabatt();return false">
-                <input id="rabatt-input" required>
-                <button type="submit">Rabattcode Einlösen</button>
-            </form>
+
             <table>
+                Warenkorb
                 <thead>
                     <th>Name</th>
                     <th>Menge</th>
@@ -32,8 +55,31 @@
                 <tbody id="basket-div">
 
                 </tbody>
-                <tfoot id="table-footer">
 
+                <tfoot id="table-footer">
+                    <tr>
+                        <th>Rabatt:</th>
+                        <td></td>
+                        <td>0</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>Gesamt:</th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <th>Mit Rabatt:</th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">Rabatt Optional.</td>
+                    </tr>
                 </tfoot>
             </table>
         </div>
