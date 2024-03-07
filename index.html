@@ -29,7 +29,7 @@
                     <span onclick="fillRabattInput('rabattPercent')">4% Rabatt</span>
                     <span onclick="fillRabattInput('rabattEuro')">4 Euro Rabatt</span>
                 </div>
-                <form onsubmit="makeRabatt();return false">
+                <form onsubmit="applyRabatt();return false">
                     <input id="rabatt-input" required>
                     <button type="submit">Rabattcode Einlösen</button>
                 </form>
@@ -46,28 +46,29 @@
                     <th>Total</th>
                 </thead>
                 <tbody id="basket-div">
+
                 </tbody>
                 <tfoot id="table-footer">
-                    <tr>
+                    <tr id="rabatt-td">
                         <th>Rabatt:</th>
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td>0</td>
+                        <td id="rabatt-td">0</td>
                     </tr>
                     <tr>
                         <th>Gesamt:</th>
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td>0</td>
+                        <td id="total-td">0</td>
                     </tr>
                     <tr>
                         <th>Mit Rabatt:</th>
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td>0</td>
+                        <td id="total-minus-rabatt-td">0</td>
                     </tr>
                 </tfoot>
             </table>

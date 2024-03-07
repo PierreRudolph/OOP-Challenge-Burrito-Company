@@ -1,35 +1,68 @@
+/**
+ * Represents a shopping basket.
+ */
 class Basket {
+    /**
+    * Array containing products in the basket.
+    * @type {Product[]}
+    */
     products = [];
 
-    constructor(newProduct) {
-        if (newProduct) {
-            this.products.push(newProduct);
-        }
+    constructor() {
+
     }
 }
 
+/**
+ * Represents a product.
+ */
 class Product {
+    /**
+     * Name of the product.
+     * @type {string}
+     */
     name = "";
+    /**
+   * Quantity of the product.
+   * @type {number}
+   */
     amount = 0;
-    prize = 0;
+    /**
+    * Price of the product.
+    * @type {number}
+    */
+    price = 0;
+    /**
+    * Unique identifier for the product.
+    * @type {number}
+    */
     id = 0;
+    /**
+        * Creates an instance of Product.
+        * @param {string} [name=''] - Name of the product.
+        * @param {number} [amount=0] - Quantity of the product.
+        * @param {number} [prize=0] - Price of the product.
+        * @param {number} [id=0] - Unique identifier for the product.
+        */
     constructor(name, amount, prize, id) {
-        if (name) {
-            this.name = name;
-        }
-        if (amount) {
-            this.amount = amount;
-        }
-        if (prize) {
-            this.prize = prize;
-        }
+        this.name = name ? name : '';
+        this.amount = amount ? amount : '';
+        this.price = prize ? prize : '';
         this.id = id ? id : '';
     }
 }
 
+
+// Global variables
 let basket = new Basket();
-let rabatt = 0;
+let discount = 0;
 let percent = false;
+let totalAmount = 0;
+let discountAmount = 0;
+let discountPercent = 0;
+/**
+ * Array of Predefined Products
+ */
 let products = [
     {
         name: 'Cheese Burrito',
@@ -59,6 +92,10 @@ let products = [
 ]
 
 
+/**
+ * Adds a product to the basket.
+ * @param {number} id - The id of the product to be added.
+ */
 function addProduct(id) {
     let newProduct = '';
     products.forEach((product) => {
@@ -74,6 +111,10 @@ function addProduct(id) {
 }
 
 
+/**
+ * Iterates through the products in the basket to update the quantity of an existing product or add a new product.
+ * @param {Product} newProduct - The product to be added or updated.
+ */
 function iterateThruBasket(newProduct) {
     for (let i = 0; i < basket.products.length; i++) {
         const product = basket.products[i];
@@ -90,11 +131,20 @@ function iterateThruBasket(newProduct) {
 }
 
 
+/**
+ * Checks if the basket is empty.
+ * @returns {boolean} True if the basket is empty, false otherwise.
+ */
 function basketIsEmpty() {
     return basket.products.length == 0;
 }
 
 
+/**
+ * Checks if a product is already in the basket.
+ * @param {Product} newProduct - The product to check.
+ * @returns {boolean} True if the product is in the basket, false otherwise.
+ */
 function isInBasket(newProduct) {
     let isInBasket = false;
     for (let i = 0; i < basket.products.length; i++) {
@@ -108,6 +158,9 @@ function isInBasket(newProduct) {
 }
 
 
+/**
+ * Generates HTML for displaying the list of products.
+ */
 function createProductList() {
     let productList = getHTMLElem('product-list');
     productList.innerHTML = '';
@@ -123,12 +176,20 @@ function createProductList() {
 }
 
 
+/**
+ * Clears the basket and loads its HTML representation.
+ */
 function createBasket() {
     clearTableBody();
     loadBasket();
 }
 
 
+/**
+ * Formats a number as currency using the locale.
+ * @param {number} num - The number to format as currency.
+ * @returns {string} The formatted currency string.
+ */
 function formatNumber(num) {
     const locals = 'de-De';
     const options = { style: 'currency', currency: 'EUR' };
@@ -136,84 +197,126 @@ function formatNumber(num) {
 }
 
 
+/**
+ * Loads the HTML representation of the basket.
+ */
 function loadBasket() {
     let basketDiv = getHTMLElem('basket-div');
+    totalAmount = 0;
     clearTableBody();
     clearTableFooter();
-    let totalAmount = 0;
-    let rabattAmount = 0;
-    let rabattPecent = 0;
+    renderBasket(basketDiv);
+    calculateDiscount();
+    renderSum();
+}
+
+
+/**
+ * Renders the HTML representation of the basket.
+ * @param {HTMLElement} basketDiv - The DOM element where the basket will be rendered.
+ */
+function renderBasket(basketDiv) {
     basket.products.forEach(element => {
-        let prizeSum = element.prize * element.amount;
+        let prizeSum = element.price * element.amount;
         basketDiv.innerHTML +=/*html*/`
         <tr>
             <td>${element.name}</td>
             <td>${element.amount}</td>
-           <td>${formatNumber(element.prize)}</td>
+           <td>${formatNumber(element.price)}</td>
            <td></td>
             <td>${formatNumber(prizeSum)}</td>
         </tr>
-
     `;
-        totalAmount = totalAmount + prizeSum;
+        addToTotalAmount(prizeSum);
     });
-
-    if (!percent && rabatt > 0) {
-        rabattAmount = totalAmount - rabatt
-    }
-    if (percent && rabatt > 0) {
-        rabattPecent = totalAmount * rabatt / 100;
-        rabattAmount = totalAmount - rabattPecent;
-    }
-    innerHTMLTotalPrize(totalAmount, rabattAmount);
 }
 
 
-function innerHTMLTotalPrize(totalAmount, rabattAmount) {
+/**
+ * Adds the prize of a product to the total amount.
+ * @param {number} prizeSum - The prize of a product.
+ */
+function addToTotalAmount(prizeSum) {
+    totalAmount = totalAmount + prizeSum;
+}
+
+
+/**
+ * Calculates the discount amount.
+ */
+function calculateDiscount() {
+    if (!percent && discount > 0) {
+        discountAmount = totalAmount - discount
+    }
+    if (percent && discount > 0) {
+        discountPercent = totalAmount * discount / 100;
+        discountAmount = totalAmount - discountPercent;
+    }
+}
+
+
+/**
+ * Renders the summary section of the basket.
+ */
+function renderSum() {
     let tableFooter = getHTMLElem('table-footer');
-    if (!percent) {
-        rabattToString = formatNumber(rabatt);
-    } else {
-        rabattToString = rabatt + '%';
-    }
+    let rabattToString = getRabattToString();
+
     tableFooter.innerHTML +=/*html*/`
-    <tr>
-        <th>Rabatt:</th>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>${rabattToString}</td>
-    </tr>
-    <tr>
-        <th>Gesamt:</th>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>${formatNumber(totalAmount)}</td>
-    </tr>
-    <tr>
-        <th>Mit Rabatt:</th>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>${formatNumber(rabattAmount)}</td>
-    </tr>
-    <tr>       
-        <td colspan="3">Rabatt Optional.</td>     
-    </tr>
-`;
+        <tr>
+            <th>Rabatt:</th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>${rabattToString}</td>
+        </tr>
+        <tr>
+            <th>Gesamt:</th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>${formatNumber(totalAmount)}</td>
+        </tr>
+        <tr>
+            <th>Mit Rabatt:</th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>${formatNumber(discountAmount)}</td>
+        </tr>
+        <tr>       
+            <td colspan="3">Rabatt Optional.</td>     
+        </tr>
+    `;
 }
 
 
-function makeRabatt() {
+/**
+ * Converts the discount to a string representation.
+ * @returns {string} The string representation of the discount.
+ */
+function getRabattToString() {
+    if (!percent) {
+        return formatNumber(discount);
+    } else {
+        return discount + '%';
+    }
+}
+
+
+
+/**
+ * Applies the discount to the basket.
+ */
+function applyRabatt() {
     let rabattInput = getHTMLElem('rabatt-input');
     if (rabattInput.value == 'rabattEuro') {
-        rabatt = 4;
+        discount = 4;
         percent = false;
     }
 
     if (rabattInput.value == 'rabattPercent') {
-        rabatt = 4;
+        discount = 4;
         percent = true;
     }
     clearRabattInput();
@@ -221,29 +324,47 @@ function makeRabatt() {
 }
 
 
+/**
+ * Fills the discount input with the provided code.
+ * @param {string} rabattCode - The discount code to fill.
+ */
 function fillRabattInput(rabattCode) {
     getHTMLElem('rabatt-input').value = rabattCode;
 }
 
 
+/**
+ * Clears the discount input field.
+ */
 function clearRabattInput() {
     let rabattInput = getHTMLElem('rabatt-input');
     rabattInput.value = "";
 }
 
 
+/**
+ * Clears the table body in the basket.
+ */
 function clearTableBody() {
     let basketDiv = getHTMLElem('basket-div');
     basketDiv.innerHTML = "";
 }
 
 
+/**
+ * Clears the table footer in the basket.
+ */
 function clearTableFooter() {
     let tableFooter = getHTMLElem('table-footer');
     tableFooter.innerHTML = "";
 }
 
 
+/**
+ * Retrieves the HTML element by its ID.
+ * @param {string} id - The ID of the HTML element.
+ * @returns {HTMLElement} The HTML element.
+ */
 function getHTMLElem(id) {
     let elem = document.getElementById(`${id}`);
     return elem;
